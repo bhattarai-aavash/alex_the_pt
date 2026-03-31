@@ -1,0 +1,5 @@
+# Railway: set this service root to `personal_trainer_agent` in the dashboard,
+# or deploy from this folder. Uses the Dockerfile for FastAPI + uvicorn.
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
