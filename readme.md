@@ -42,6 +42,44 @@ trainer-frontend/trainer-frontend/       # Next.js frontend app
 - `POST /chat` - text chat with Alex
 - `POST /food/calories` - image-based calorie estimation
 
+## How The Agents Work
+
+### 1) Chat Coach Agent (`POST /chat`)
+
+- The frontend sends conversation history to `POST /api/chat` (Next.js route).
+- The route proxies to backend `POST /chat`.
+- Backend converts messages into LangChain message objects and runs a LangGraph flow:
+  - `trainer` node: calls Groq model with Alex system prompt
+  - `tools` node: calls structured fitness tools when the model asks for them
+  - loops back to `trainer` until a final answer is ready
+- The final assistant message is returned to the UI.
+
+What this agent is best at:
+- workout plans
+- nutrition guidance
+- recovery protocols
+- exercise form coaching
+- macro calculations via tools
+
+### 2) Food Image Calorie Agent (`POST /food/calories`)
+
+- The user uploads an image in the chat UI.
+- Frontend sends base64 image data to `POST /api/food-calories`.
+- Route proxies to backend `POST /food/calories`.
+- Backend validates input (type/size/base64), then calls Groq multimodal model with the image.
+- The model returns a structured calorie estimate JSON:
+  - `items`, `total_calories`, `assumptions`, `confidence`, `safety_note`
+- Backend runs a second pass to format that structured output into an Alex-style response (`assistant_message`) for better UX.
+- UI displays `assistant_message` if available, otherwise it falls back to the raw structured output.
+
+### 3) Guardrails In The System
+
+- **Input validation:** MIME type allowlist (`jpeg/png/webp`), max image size, strict base64 decode
+- **Rate limiting:** requests per minute per client IP (`RATE_LIMIT_RPM`)
+- **Safe failures:** internal errors are logged server-side and returned as safe API messages
+- **Structured parsing:** calorie output is parsed as JSON and validated against a strict schema
+- **CORS control:** `FRONTEND_URL` allows browser traffic only from your frontend domain
+
 ## Local Development
 
 ### Prerequisites
