@@ -116,50 +116,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 - `BACKEND_URL` (required in production)
 
-## Deployment (Recommended): Frontend on Cloudflare, Backend on AWS
 
-### A) Backend on AWS (App Runner via Docker)
-
-This repo already includes `personal_trainer_agent/Dockerfile`.
-
-1. Push this repository to GitHub.
-2. In AWS Console, open **App Runner**.
-3. Create service:
-   - **Source:** Container registry or source code (GitHub)
-   - If using source code from GitHub:
-     - set **Root directory** to `personal_trainer_agent`
-     - build should use Dockerfile
-4. Set environment variables:
-   - `GROQ_API_KEY=...`
-   - `FRONTEND_URL=https://your-cloudflare-pages-domain`
-5. Deploy and copy backend URL.
-6. Verify:
-   - `https://YOUR_AWS_BACKEND_URL/health`
-
-### B) Frontend on Cloudflare Pages
-
-1. In Cloudflare Pages, connect your GitHub repo.
-2. Build settings:
-   - **Framework:** Next.js
-   - **Root directory:** `trainer-frontend/trainer-frontend`
-   - **Build command:** `npm run build`
-3. Add environment variable:
-   - `BACKEND_URL=https://YOUR_AWS_BACKEND_URL`
-4. Deploy.
-
-Frontend API routes will proxy:
-
-- `/api/chat` -> `${BACKEND_URL}/chat`
-- `/api/food-calories` -> `${BACKEND_URL}/food/calories`
-
-## Common Issues
-
-- `Missing script: dev`:
-  - You are in the wrong folder. Use `trainer-frontend/trainer-frontend`.
-- `No messages provided`:
-  - Fixed in current code; rebuild/restart frontend after pulling latest changes.
-- CORS errors in browser:
-  - Set backend `FRONTEND_URL` to the deployed frontend URL.
 
 ## How Others Can Use This Repo
 
