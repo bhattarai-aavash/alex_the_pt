@@ -26,7 +26,7 @@ personal_trainer_agent/                  # Python backend
   Dockerfile
   .env_example
 
-trainer-frontend/trainer-frontend/       # Next.js frontend app
+trainer-frontend/                        # Next.js frontend app
   src/
     app/
       api/chat/route.ts
@@ -122,7 +122,7 @@ curl http://localhost:8000/health
 ### 2) Frontend
 
 ```bash
-cd trainer-frontend/trainer-frontend
+cd trainer-frontend
 npm install
 ```
 
@@ -150,7 +150,7 @@ Open [http://localhost:3000](http://localhost:3000).
 - `MAX_IMAGE_BYTES` (optional, default `5242880`)
 - `VISION_TIMEOUT_S` (optional, default `45`)
 
-### Frontend (`trainer-frontend/trainer-frontend/.env.local`)
+### Frontend (`trainer-frontend/.env.local`)
 
 - `BACKEND_URL` (required in production)
 
